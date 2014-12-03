@@ -4,10 +4,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -25,22 +21,20 @@ public class ControlPanel extends JPanel implements MouseListener, MouseMotionLi
 	private JLabel leverLabel;
 	private BufferedImage caseImage;
 	private JLabel caseLabel;
-	private BufferedImage screenImage;
+	private BufferedImage screenDownImage;
+	private BufferedImage screenMovingImage;
+	private BufferedImage screenUpImage;
 	private JLabel screenLabel;
 	private BufferedImage greenLedImage;
+	private BufferedImage greenLedOnImage;
 	private JLabel greenLedLabel;
 	private BufferedImage orangeLedImage;
+	private BufferedImage orangeLedOnImage;
 	private JLabel orangeLedLabel;
 	private BufferedImage redLedImage;
+	private BufferedImage redLedOnImage;
 	private JLabel redLedLabel;
-	
-	
-	//INIT VARIABLES FOR LEVER MOVEMENTS
-	
-	private int mousePosX;
-	private int mousePosY;
-	private int leverPosX;
-	private int leverPosY;
+
 	
 	
 	public ControlPanel(){
@@ -51,6 +45,8 @@ public class ControlPanel extends JPanel implements MouseListener, MouseMotionLi
 	}
 
 	private void prepareInterface(){
+
+		
 		
 		//CONTROL PANEL - MAIN PANE
 		GridBagLayout grid = new GridBagLayout();
@@ -146,11 +142,11 @@ public class ControlPanel extends JPanel implements MouseListener, MouseMotionLi
 		
 		//SCREEN - LEFT PANEL
 		try {
-			screenImage = ImageIO.read(new File("images/gearOut2.png"));
+			screenDownImage = ImageIO.read(new File("images/gearIn2.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		screenLabel = new JLabel(new ImageIcon(screenImage));
+		screenLabel = new JLabel(new ImageIcon(screenDownImage));
 		screenLabel.setHorizontalAlignment(JLabel.LEFT);
 		
 		
@@ -173,76 +169,96 @@ public class ControlPanel extends JPanel implements MouseListener, MouseMotionLi
 		
 		//COMMAND BOX - USED TO STACK TWO SHAPES
 		commandBox = Box.createVerticalBox();
-		commandBox.setBackground(Color.BLUE);
+		
 		try {
 			leverImage = ImageIO.read(new File("images/lever2.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		
-		
 		leverLabel = new JLabel(new ImageIcon(leverImage));
 		leverLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+		
 		commandBox.add(leverLabel);
 		
+		/*MOUSE LISTENER & MOTIONLISTENER TO MOVE THE LEVER
+		 * 
+		 */
+
+
 		final Point pos = new Point();
 		
-		leverLabel.addMouseListener(new MouseListener() {
-		    @Override
-		    public void mousePressed(MouseEvent e) {
-		        pos.setLocation(leverLabel.getX(),e.getY());
-		        
-		        int posInit = 0;
-				int posFinale = 400;
+		leverLabel.addMouseListener(
+			new MouseListener() {
 				
-		    	if(leverLabel.getY()<=posInit){
-		    		leverLabel.setLocation(leverLabel.getX(), posInit);
-		    	}else if(leverLabel.getY()>=posFinale){
-		    		leverLabel.setLocation(leverLabel.getX(), posFinale);
-		    	}
-		        
-		    }
-		    
-		    public void mouseClicked(MouseEvent e) {}
-		    
-		    @Override
-		    public void mouseReleased(MouseEvent e) {
-		    	
-		    	int posInit = 0;
-				int posMilieu = 200;
-				int posFinale = 400;
 				
-		    	if(leverLabel.getY()>posInit && leverLabel.getY()<= posMilieu){
-		    		leverLabel.setLocation(leverLabel.getX(), posInit);
-		    	}else if(leverLabel.getY()>posMilieu && leverLabel.getY()<= posFinale){
-		    		leverLabel.setLocation(leverLabel.getX(), posFinale);
-		    	}
-		    	
+			    @Override
+			    public void mousePressed(MouseEvent e) {
+			        pos.setLocation(leverLabel.getX(),e.getY());
+			        
+			        int posInit = 0;
+					int posFinale = 400;
+					
+			    	if(leverLabel.getY()<=posInit){
+			    		leverLabel.setLocation(leverLabel.getX(), posInit);
+			    	}else if(leverLabel.getY()>=posFinale){
+			    		leverLabel.setLocation(leverLabel.getX(), posFinale);
+			    	}
+			        
+			    }
+			    
+			    @Override
+			    public void mouseReleased(MouseEvent e) {
+			    	
+			    	int posInit = 0;
+					int posMilieu = 200;
+					int posFinale = 400;
+					
+			    	if(leverLabel.getY()>posInit && leverLabel.getY()<= posMilieu){
+			    		leverLabel.setLocation(leverLabel.getX(), posInit);
+			    	}else if(leverLabel.getY()>posMilieu && leverLabel.getY()<= posFinale){
+			    		leverLabel.setLocation(leverLabel.getX(), posFinale);
+			    	}
+			    	
+			    	if(leverLabel.getY()<=posInit){
+			    		leverLabel.setLocation(leverLabel.getX(), posInit);
+			    	}else if(leverLabel.getY()>=posFinale){
+			    		leverLabel.setLocation(leverLabel.getX(), posFinale);
+			    	}
+			    	
+			    }
+			    
+			    //Unused functions from MouseListener
+			    public void mouseClicked(MouseEvent e) {}
+			    public void mouseEntered(MouseEvent e) {}
+			    public void mouseExited(MouseEvent e) {}            
+			}
+		);
+				
+		leverLabel.addMouseMotionListener(
+			new MouseMotionListener(){
+			    @Override
+			    public void mouseDragged(MouseEvent e)
+			    {
+			    	
+			    	int posInit = 0;
+					int posFinale = 400;
+			    	
+			        leverLabel.setLocation(leverLabel.getX(), leverLabel.getY()+e.getY()-pos.y);
+			        if(leverLabel.getY()<=posInit){
+			    		leverLabel.setLocation(leverLabel.getX(), posInit);
+			    	}else if(leverLabel.getY()>=posFinale){
+			    		leverLabel.setLocation(leverLabel.getX(), posFinale);
+			    	}
+			    }
+			    public void mouseMoved(MouseEvent e) {}            
+			}
+		);
 		
-		    	
-		    }
-		    public void mouseEntered(MouseEvent e) {}
-		    public void mouseExited(MouseEvent e) {}            
-		});
-		
+		/*MOUSE LISTENER & MOTIONLISTENER TO MOVE THE LEVER - END
+		 * 
+		 */
 				
-				
-		leverLabel.addMouseMotionListener(new MouseMotionListener()
-		{
-		    @Override
-		    public void mouseDragged(MouseEvent e)
-		    {
-		        leverLabel.setLocation(leverLabel.getX(), leverLabel.getY()+e.getY()-pos.y);
-		    }
-
-		    public void mouseMoved(MouseEvent e) {}            
-		});
-		
-		
-				
-				
-		
 		try {
 			caseImage = ImageIO.read(new File("images/leverCase2.png"));
 		} catch (IOException e) {
@@ -250,12 +266,13 @@ public class ControlPanel extends JPanel implements MouseListener, MouseMotionLi
 		}
 		caseLabel = new JLabel(new ImageIcon(caseImage));
 		caseLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+		caseLabel.setSize(caseLabel.getWidth(), 400);
 		commandBox.add(caseLabel);
-		
-		
+				
 		
 		//ADDS COMMAND BOX TO THE MAIN PANEL WITH CONSTRAINTS
 		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.fill = GridBagConstraints.VERTICAL;
 		gbc.gridx = 1;
 		gbc.gridy = 1;
 		gbc.weightx = 1;
@@ -270,65 +287,34 @@ public class ControlPanel extends JPanel implements MouseListener, MouseMotionLi
 
 	
 	void eventOutput(String eventDescription, MouseEvent e){
-		
 		System.out.println("Mouse event : " + eventDescription);
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		eventOutput("Mouse Clicked !" , e);
-		
-	}
+	public void mouseClicked(MouseEvent e) {}
 
 	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		eventOutput("Mouse Entered !" , e);
-		
-	}
+	public void mouseEntered(MouseEvent e) {}
 
 	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		eventOutput("Mouse Exited !" , e);
-		
-	}
+	public void mouseExited(MouseEvent e) {}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
 		eventOutput("Mouse Pressed !" , e);
-		
-		if((mousePosX >= leverPosX) || (mousePosX <= (leverPosX + leverLabel.getPreferredSize().getWidth())) 
-				&& ((mousePosY >= leverPosY) || (mousePosY <= (leverPosY + leverLabel.getPreferredSize().getHeight())))){
-			
-			eventOutput("Lever On Y "+ leverLabel.getY()  , e);
-			
-			mousePosY = e.getY();
-			leverPosY = mousePosY;
-		}
-		
+		eventOutput("Lever On Y "+ leverLabel.getY()  , e);
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
 		eventOutput("Mouse Released !" , e);
-		
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseDragged(MouseEvent e) {}
 
 	@Override
-	public void mouseMoved(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseMoved(MouseEvent e) {}
 
 
 
