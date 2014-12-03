@@ -1,4 +1,0 @@
-gearLandingProject
-==================
-
-TP Qualite Logicielle
