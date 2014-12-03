@@ -1,0 +1,90 @@
+package Controller;
+import Model.Gear;
+import Model.Sensors;
+import Model.Gear.GearStatus;
+
+public class System {
+	private Gear gearSet;
+	private Sensors sensorSet;
+	
+	public System(){
+		gearSet = new Gear();
+		sensorSet = new Sensors();
+	}
+	
+	public boolean gearsRetracting(){
+		boolean res = false;
+		if(sensorSet.getForce() > -Sensors.planeWeight){
+			if(gearSet.getStatus() != GearStatus.up){
+				gearSet.setStatus(GearStatus.up);
+				res =  true;
+			}
+		}
+		return res;
+	}
+	
+	public void gearsOngoing(){
+		if(gearSet.getStatus() != GearStatus.down || gearSet.getStatus() == GearStatus.stuck){
+		gearSet.setStatus(GearStatus.goingDown);
+		}
+		if(gearSet.getStatus() != GearStatus.up || gearSet.getStatus() == GearStatus.stuck){
+			gearSet.setStatus(GearStatus.goingUp);
+		}
+	}
+	
+	public boolean gearsOutgoing(){
+		boolean res = false;
+		if(sensorSet.getForce() <= -Sensors.planeWeight){
+			if(gearSet.getStatus() != GearStatus.down){
+				gearSet.setStatus(GearStatus.down);
+				res =  true;
+			}
+		}
+		return res;
+	}
+	
+	public void led_managing(Gear gearset){
+			if (gearset.getStatus() == GearStatus.up || gearset.getStatus() == GearStatus.down){
+				// green light on + red and orange light off
+			}	
+			if (gearset.getStatus() == GearStatus.goingUp || gearset.getStatus() == GearStatus.goingDown){
+				// orange light on + red and green light off
+			}
+			if (gearset.getStatus() == GearStatus.stuck){
+				// red light on + orange and green light off
+			}
+	}
+	
+	public void gear_state_listener(JButton commandeButton){
+			if(){  //commandeButton.state == 0 in if
+					if(gearSet.getStatus() == GearStatus.up){  // add timing in the if
+					gearsOngoing();
+					//changer leds states
+					//sleep(5000ms)
+					gearsOutgoing();	
+					}
+					else {
+						gearSet.setStatus(GearStatus.stuck);
+						// change leds states
+					}
+			}
+			if(){//commandeButton.state = 1 in if
+					if(gearSet.getStatus() == GearStatus.up){  // add timing in the if
+					gearsOngoing();
+					//change leds states
+					//sleep(5000ms)
+					gearsRetracting();
+					}
+					else {
+						gearSet.setStatus(GearStatus.stuck);
+						//change led state to red
+					}
+			}
+			
+	}
+	
+	
+	public Gear getGear(){return this.gearSet;}
+	public Sensors getSensors(){return this.sensorSet;}
+
+}
