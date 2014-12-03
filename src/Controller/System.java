@@ -14,9 +14,9 @@ public class System {
 	
 	public void toggleGear(){
 		if(getGear().getStatus() == GearStatus.down)
-			getGear().goDown();
-		else if(getGear().getStatus() == GearStatus.up)
 			getGear().goUp();
+		else if(getGear().getStatus() == GearStatus.up)
+			getGear().goDown();
 	}
 	/*public boolean gearsRetracting(){
 		boolean res = false;
