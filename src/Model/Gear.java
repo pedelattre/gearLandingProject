@@ -19,14 +19,22 @@ public class Gear {
 		setStatus(GearStatus.down);
 	}
 	
-	public void maneuver(GearStatus direction){
+	public GearStatus maneuver(GearStatus direction){
 		if(direction == GearStatus.up)
 			setStatus(GearStatus.goingUp);
 		else if (direction == GearStatus.down)
 			setStatus(GearStatus.goingDown);
-		// Add a sleep(1000);			
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return direction;
 	}		
 	public GearStatus getStatus(){return this.status;}	
-	public void setStatus(GearStatus gearStatus){this.status = gearStatus;}	
+	public void setStatus(GearStatus gearStatus){
+		this.status = gearStatus;
+		System.out.println("Gear Status: "+this.status.toString());
+	}
 
 }

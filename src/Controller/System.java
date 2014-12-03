@@ -12,7 +12,13 @@ public class System {
 		sensorSet = new Sensors();
 	}
 	
-	public boolean gearsRetracting(){
+	public void toggleGear(){
+		if(getGear().getStatus() == GearStatus.down)
+			getGear().goDown();
+		else if(getGear().getStatus() == GearStatus.up)
+			getGear().goUp();
+	}
+	/*public boolean gearsRetracting(){
 		boolean res = false;
 		if(sensorSet.getForce() > -Sensors.planeWeight){
 			if(gearSet.getStatus() != GearStatus.up){
@@ -21,9 +27,9 @@ public class System {
 			}
 		}
 		return res;
-	}
+	}*/
 	
-	public boolean gearsOutgoing(){
+	/*public boolean gearsOutgoing(){
 		boolean res = false;
 		if(sensorSet.getForce() <= -Sensors.planeWeight){
 			if(gearSet.getStatus() != GearStatus.down){
@@ -32,7 +38,7 @@ public class System {
 			}
 		}
 		return res;
-	}
+	}*/
 	
 	public Gear getGear(){return this.gearSet;}
 	public Sensors getSensors(){return this.sensorSet;}
