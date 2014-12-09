@@ -12,6 +12,9 @@ public class Sensors {
 	
 	public float getSpeed(){return this.speed;}
 	public float getForce(){return this.force;}	
-	public void setSpeed(float speed){this.speed = speed;}
+	public void setSpeed(float speed){
+		this.speed = speed;
+		System.out.println("Speed: "+this.speed);
+	}
 	public void setForce(float force){this.force = force;}	
 }
