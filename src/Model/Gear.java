@@ -5,13 +5,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Gear extends Observable{
-	;
 	public enum GearStatus{up, down, goingUp, goingDown, stuck}
 	private GearStatus status;
 	
 	public Gear(){
-		
-		setStatus(GearStatus.down);
+		//setStatus(GearStatus.down);
 	}
 	
 	public void goUp(){
@@ -42,7 +40,17 @@ public class Gear extends Observable{
 		else if (direction == GearStatus.down)
 			setStatus(GearStatus.goingDown);
 		return direction;
-	}		
+	}
+	
+	public void toggleGear(){
+		if(this.getStatus() == GearStatus.down)
+			this.goUp();
+		else if(this.getStatus() == GearStatus.up)
+			this.goDown();
+		else this.goDown();
+	}
+	
+	// GETTERS & SETTERS
 	public GearStatus getStatus(){return this.status;}	
 	public void setStatus(GearStatus gearStatus){
 		this.status = gearStatus;
@@ -50,5 +58,6 @@ public class Gear extends Observable{
 		notifyObservers();
 		System.out.println("Gear Status: "+this.status.toString());
 	}
-
+	
+	
 }

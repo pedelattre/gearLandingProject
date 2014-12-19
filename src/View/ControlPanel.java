@@ -11,12 +11,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Observable;
-import java.util.Observer;
 
 
 
@@ -27,28 +24,25 @@ public class ControlPanel extends JPanel implements ActionListener{
 	public static int posFinale = 400;
 	
 	public Box commandBox;
+	public JButton buttonControl;
+	
 	private JPanel ledsPanel;
-	private BufferedImage leverImage;
-	private JLabel leverLabel;
-	private BufferedImage caseImage;
 	private JLabel caseLabel;
+	private JLabel leverLabel;
+	private JLabel screenLabel;	
+	private JLabel LedGear1;
+	private JLabel LedGear2;
+	private JLabel LedGear3;
+	private BufferedImage LedOffImage;
+	private BufferedImage LedGreenImage;
+	private BufferedImage LedOrangeImage;
+	private BufferedImage LedRedImage;
+	private BufferedImage leverImage;
+	private BufferedImage caseImage;
 	private BufferedImage screenDownImage;
 	private BufferedImage screenMovingImage;
 	private BufferedImage screenUpImage;
-	public JButton buttonControl;
-	private JLabel screenLabel;
-	public BufferedImage greenLedImage;
-	public BufferedImage greenLedOnImage;
-	public JLabel greenLedLabel;
-	private BufferedImage orangeLedImage;
-	private BufferedImage orangeLedOnImage;
-	private JLabel orangeLedLabel;
-	private BufferedImage redLedImage;
-	private BufferedImage redLedOnImage;
-	private JLabel redLedLabel;
-	
 	protected Controller sys;
-	
 	
 	public ControlPanel(Controller sys){
 		this.ledsPanel = new JPanel();
@@ -56,33 +50,34 @@ public class ControlPanel extends JPanel implements ActionListener{
 		try {
 			this.caseImage = ImageIO.read(new File("images/leverCase2.png"));
 			this.leverImage = ImageIO.read(new File("images/lever2.png"));
-			this.redLedImage = ImageIO.read(new File("images/redOff2.png"));
-			this.redLedOnImage = ImageIO.read(new File("images/redOn.png"));
-			this.orangeLedImage = ImageIO.read(new File("images/orangeOff2.png"));
-			this.orangeLedOnImage = ImageIO.read(new File("images/orangeOn.png"));
-			this.greenLedImage = ImageIO.read(new File("images/greenOff2.png"));
-			this.greenLedOnImage = ImageIO.read(new File("images/greenOn.png"));
-			this.screenDownImage = ImageIO.read(new File("images/gearIn2.png"));
+			this.LedOffImage = ImageIO.read(new File("images/redOff2.png"));
+			this.LedRedImage = ImageIO.read(new File("images/redOn.png"));
+			this.LedOrangeImage = ImageIO.read(new File("images/orangeOff2.png"));
+			this.LedGreenImage = ImageIO.read(new File("images/orangeOn.png"));
+			this.screenDownImage = ImageIO.read(new File("images/gearOut2.png"));
 			this.screenMovingImage = ImageIO.read(new File("images/gearMoving2.png"));
-			this.screenUpImage = ImageIO.read(new File("images/gearOut2.png"));
+			this.screenUpImage = ImageIO.read(new File("images/gearIn2.png"));
 		} catch (IOException e) {
 			
 			e.printStackTrace();
 		}
 		this.leverLabel = new JLabel(new ImageIcon(leverImage));
 		this.caseLabel = new JLabel(new ImageIcon(caseImage));
-		this.greenLedLabel = new JLabel(new ImageIcon(greenLedImage));
-		this.redLedLabel = new JLabel(new ImageIcon(redLedImage));
-		this.orangeLedLabel = new JLabel(new ImageIcon(orangeLedImage));
+		this.LedGear1 = new JLabel(new ImageIcon(LedGreenImage));
+		this.LedGear2 = new JLabel(new ImageIcon(LedGreenImage));
+		this.LedGear3 = new JLabel(new ImageIcon(LedGreenImage));
 		this.screenLabel = new JLabel(new ImageIcon(screenDownImage));
 		this.commandBox = Box.createVerticalBox();
 		
 		this.sys = sys;
 		prepareInterface();
+		downState(LedGear1);
+		downState(LedGear2);
+		downState(LedGear3);
+		downStateGear(screenLabel);
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
 		this.actionHandler();
-		downState();
 	}
 
 	private void prepareInterface(){
@@ -105,30 +100,30 @@ public class ControlPanel extends JPanel implements ActionListener{
 		//INIT CONSTRAINTS - ledsGbc
 		GridBagConstraints ledsGbc = new GridBagConstraints();
 		
-		//GREEN LED LABEL
+		//Gear1 Led
 		ledsGbc.gridx = 0; 
 		ledsGbc.gridy = 0;
 		ledsGbc.gridheight = 1;
 		ledsGbc.weightx = 1;
 		ledsGbc.anchor = GridBagConstraints.LINE_START;
-		ledsPanel.add(greenLedLabel, ledsGbc);
+		ledsPanel.add(LedGear1, ledsGbc);
 					
-		//ORANGE LED LABEL
+		//Oear2 Led
 		ledsGbc.gridx = 1; 
 		ledsGbc.gridy = 0;
 		ledsGbc.gridheight = 1;
 		ledsGbc.weightx = 1;
 		ledsGbc.anchor = GridBagConstraints.CENTER;
-		ledsPanel.add(orangeLedLabel, ledsGbc);
+		ledsPanel.add(LedGear2, ledsGbc);
 
-		//RED LED LABEL
+		//Gear3 Led
 		ledsGbc.gridx = 2; 
 		ledsGbc.gridy = 0;
 		ledsGbc.gridheight = 1;
 		ledsGbc.gridwidth = 1;
 		ledsGbc.weightx = 1;
 		ledsGbc.anchor = GridBagConstraints.LINE_END;
-		ledsPanel.add(redLedLabel, ledsGbc);
+		ledsPanel.add(LedGear3, ledsGbc);
 		
 		//ADDS LEDS PANEL TO THE MAIN PANEL WITH CONSTRAINTS
 		gbc.gridx = 2;
@@ -179,7 +174,7 @@ public class ControlPanel extends JPanel implements ActionListener{
 		/*
 		 * COMMAND BOX - END
 		 */
-	
+		leverLabel.setLocation(leverLabel.getX(), posFinale);
 	}
 	
 	public void actionHandler(){
@@ -187,7 +182,7 @@ public class ControlPanel extends JPanel implements ActionListener{
 			new MouseListener() {
 				public void mouseClicked(MouseEvent e) {
 			    	toggleLever();
-			    	sys.toggleGear();
+			    	sys.getGear().toggleGearSet();
 			    }
 			    public void mousePressed(MouseEvent e) {}
 			    public void mouseReleased(MouseEvent e) {}			    
@@ -203,32 +198,29 @@ public class ControlPanel extends JPanel implements ActionListener{
 		else leverLabel.setLocation(leverLabel.getX(), posInit);
 	}
 	
-	public void upState(){
-		greenLedLabel.setIcon(new ImageIcon(greenLedImage));
-		redLedLabel.setIcon(new ImageIcon(redLedImage));
-		orangeLedLabel.setIcon(new ImageIcon(orangeLedImage));
-		screenLabel.setIcon(new ImageIcon(screenUpImage));
+	public void upState(JLabel led){
+		led.setIcon(new ImageIcon(LedOffImage));
+	}
+	public void upStateGear(JLabel image){
+		image.setIcon(new ImageIcon(screenUpImage));
 	}
 	
-	public void downState(){
-		greenLedLabel.setIcon(new ImageIcon(greenLedOnImage));
-		redLedLabel.setIcon(new ImageIcon(redLedImage));
-		orangeLedLabel.setIcon(new ImageIcon(orangeLedImage));
-		screenLabel.setIcon(new ImageIcon(screenDownImage));
+	public void downState(JLabel led){		
+		led.setIcon(new ImageIcon(LedGreenImage));
+	}
+	public void downStateGear(JLabel image){
+		image.setIcon(new ImageIcon(screenDownImage));
 	}
 	
-	public void maneuverState(){
-		greenLedLabel.setIcon(new ImageIcon(greenLedImage));
-		redLedLabel.setIcon(new ImageIcon(redLedImage));
-		orangeLedLabel.setIcon(new ImageIcon(orangeLedOnImage));
-		screenLabel.setIcon(new ImageIcon(screenMovingImage));
+	public void maneuverState(JLabel led){
+		led.setIcon(new ImageIcon(LedOrangeImage));
+	}
+	public void maneuverStateGear(JLabel image){
+		image.setIcon(new ImageIcon(screenMovingImage));
 	}
 	
-	public void failureState(){
-		greenLedLabel.setIcon(new ImageIcon(greenLedImage));
-		redLedLabel.setIcon(new ImageIcon(redLedOnImage));
-		orangeLedLabel.setIcon(new ImageIcon(orangeLedImage));
-		screenLabel.setIcon(new ImageIcon(screenMovingImage));
+	public void failureState(JLabel led){
+		led.setIcon(new ImageIcon(LedRedImage));
 	}
 	
 	public JLabel getLever(){
@@ -239,6 +231,37 @@ public class ControlPanel extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+	public JLabel getScreenLabel() {
+		return screenLabel;
+	}
+
+	public void setScreenLabel(JLabel screenLabel) {
+		this.screenLabel = screenLabel;
+	}
+
+	public JLabel getLedGear1() {
+		return LedGear1;
+	}
+
+	public void setLedGear1(JLabel ledGear1) {
+		LedGear1 = ledGear1;
+	}
+
+	public JLabel getLedGear2() {
+		return LedGear2;
+	}
+
+	public void setLedGear2(JLabel ledGear2) {
+		LedGear2 = ledGear2;
+	}
+
+	public JLabel getLedGear3() {
+		return LedGear3;
+	}
+
+	public void setLedGear3(JLabel ledGear3) {
+		LedGear3 = ledGear3;
 	}
 
 }
