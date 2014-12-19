@@ -30,7 +30,6 @@ public class GearLandingCommand extends JFrame implements Observer{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.getContentPane().add(pan);
 		this.setVisible(true);
-		
 	}
 
 
@@ -46,6 +45,7 @@ public class GearLandingCommand extends JFrame implements Observer{
 				pan.maneuverState(pan.getLedGear1());
 			if(gearSet.gearSet.get(0).getStatus() == GearStatus.stuck)
 				pan.failureState(pan.getLedGear1());
+			
 		}
 		else if(arg0 == gearSet.gearSet.get(1))
 		{			
@@ -53,40 +53,27 @@ public class GearLandingCommand extends JFrame implements Observer{
 				pan.upState(pan.getLedGear2());
 			if(gearSet.gearSet.get(1).getStatus() == GearStatus.down)
 				pan.downState(pan.getLedGear2());
-			if(gearSet.gearSet.get(1).getStatus() == GearStatus.goingUp || gearSet.gearSet.get(0).getStatus() == GearStatus.goingDown)
+			if(gearSet.gearSet.get(1).getStatus() == GearStatus.goingUp || gearSet.gearSet.get(1).getStatus() == GearStatus.goingDown)
 				pan.maneuverState(pan.getLedGear2());
 			if(gearSet.gearSet.get(1).getStatus() == GearStatus.stuck)
 				pan.failureState(pan.getLedGear2());
 		}
 		else if(arg0 == gearSet.gearSet.get(2))
 		{			
-			if(gearSet.gearSet.get(1).getStatus() == GearStatus.up)
-				pan.upState(pan.getLedGear3());
-			if(gearSet.gearSet.get(1).getStatus() == GearStatus.down)
+			if(gearSet.gearSet.get(2).getStatus() == GearStatus.up){
+				pan.upState(pan.getLedGear3());}
+				pan.upStateGear(pan.getScreenLabel());
+			if(gearSet.gearSet.get(2).getStatus() == GearStatus.down){
 				pan.downState(pan.getLedGear3());
-			if(gearSet.gearSet.get(1).getStatus() == GearStatus.goingUp || gearSet.gearSet.get(0).getStatus() == GearStatus.goingDown)
+				pan.downStateGear(pan.getScreenLabel());}
+			if(gearSet.gearSet.get(2).getStatus() == GearStatus.goingUp || gearSet.gearSet.get(0).getStatus() == GearStatus.goingDown){
 				pan.maneuverState(pan.getLedGear3());
-			if(gearSet.gearSet.get(1).getStatus() == GearStatus.stuck)
-				pan.failureState(pan.getLedGear3());
+				pan.maneuverStateGear(pan.getScreenLabel());}
+			if(gearSet.gearSet.get(2).getStatus() == GearStatus.stuck){
+				pan.failureState(pan.getLedGear3());}
 		}
 		
-		if(arg0 == gearSet)
-		{
-			if(gearSet.getGearSetStatus() == GearStatus.up)
-				pan.upStateGear(pan.getScreenLabel());
-			
-			if(gearSet.getGearSetStatus() == GearStatus.down)
-				pan.downStateGear(pan.getScreenLabel());
-			
-			if(gearSet.getGearSetStatus() == GearStatus.goingDown || gearSet.getGearSetStatus() == GearStatus.goingDown)
-				pan.maneuverStateGear(pan.getScreenLabel());
-			
-			if(gearSet.getGearSetStatus() == GearStatus.goingUp || gearSet.getGearSetStatus() == GearStatus.goingUp)
-				pan.maneuverStateGear(pan.getScreenLabel());
-			
-			if(gearSet.getGearSetStatus() == GearStatus.stuck)
-				pan.maneuverStateGear(pan.getScreenLabel());			
-		}
+		
 	}
 }
 	

@@ -58,12 +58,7 @@ public class GearSet extends Observable{
 		toggleg1.start();
 		toggleg2.start();
 		toggleg3.start();
-        /*try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
+		
 		setGearSetGeneralStatus(getGearSetStatus());
 		setChanged();
 		notifyObservers();

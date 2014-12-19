@@ -50,10 +50,10 @@ public class ControlPanel extends JPanel implements ActionListener{
 		try {
 			this.caseImage = ImageIO.read(new File("images/leverCase2.png"));
 			this.leverImage = ImageIO.read(new File("images/lever2.png"));
-			this.LedOffImage = ImageIO.read(new File("images/redOff2.png"));
-			this.LedRedImage = ImageIO.read(new File("images/redOn.png"));
-			this.LedOrangeImage = ImageIO.read(new File("images/orangeOff2.png"));
-			this.LedGreenImage = ImageIO.read(new File("images/orangeOn.png"));
+			this.LedOffImage = ImageIO.read(new File("images/up.png"));
+			this.LedRedImage = ImageIO.read(new File("images/failure.png"));
+			this.LedOrangeImage = ImageIO.read(new File("images/moving.png"));
+			this.LedGreenImage = ImageIO.read(new File("images/down.png"));
 			this.screenDownImage = ImageIO.read(new File("images/gearOut2.png"));
 			this.screenMovingImage = ImageIO.read(new File("images/gearMoving2.png"));
 			this.screenUpImage = ImageIO.read(new File("images/gearIn2.png"));
