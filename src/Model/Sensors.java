@@ -1,9 +1,10 @@
 package Model;
 
-public class Sensors {
+
+public class Sensors{
 	private float speed;
 	private float force;
-	public static final float planeWeight = 100000;
+	public static final float planeWeight = -100000;
 	
 	public Sensors(){
 		setSpeed(0);

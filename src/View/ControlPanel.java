@@ -4,11 +4,15 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import Controller.Controller;
+import Model.Sensors;
+import Model.Gear.GearStatus;
 
 import java.awt.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -33,8 +37,8 @@ public class ControlPanel extends JPanel implements ActionListener{
 	private JLabel LedGear1;
 	private JLabel LedGear2;
 	private JLabel LedGear3;
-	private JTextField speedTextField;
-	private JTextField forceTextField;	
+	private JComboBox<String> speedTextField;
+	private JComboBox<String> forceTextField;	
 	private BufferedImage LedOffImage;
 	private BufferedImage LedGreenImage;
 	private BufferedImage LedOrangeImage;
@@ -67,8 +71,8 @@ public class ControlPanel extends JPanel implements ActionListener{
 			e.printStackTrace();
 		}
 		
-		this.speedTextField = new JTextField(String.valueOf(sys.getSensors().getSpeed()));
-		this.forceTextField = new JTextField(String.valueOf(sys.getSensors().getForce()));
+		this.speedTextField = new JComboBox();
+		this.forceTextField = new JComboBox();
 		
 		this.leverLabel = new JLabel(new ImageIcon(leverImage));
 		this.caseLabel = new JLabel(new ImageIcon(caseImage));
@@ -173,12 +177,39 @@ public class ControlPanel extends JPanel implements ActionListener{
 		sensorsPanel.add(new JLabel("Force: "));
 		sensorsPanel.add(forceTextField);
 		
+		
 		//ADDS SENSORS PANEL TO THE MAIN PANEL WITH CONSTRAINTS
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		gbc.weightx = 1;
 		this.add(sensorsPanel, gbc);
+		
+		speedTextField.addItem("0");
+		speedTextField.addItem("200");
+		speedTextField.addItem("750");
+		speedTextField.addItem("1000");
+		
+		forceTextField.addItem("Landed");
+		forceTextField.addItem("In the air");
+		
+		speedTextField.addActionListener (new ActionListener () {
+		    public void actionPerformed(ActionEvent e) {
+		        sys.getGear().getSensors().setSpeed(Float.parseFloat(speedTextField.getSelectedItem().toString()));
+		    }
+		});
+		forceTextField.addActionListener (new ActionListener () {
+		    public void actionPerformed(ActionEvent e) {
+		    	if(forceTextField.getSelectedIndex() == 0){
+			        sys.getGear().getSensors().setForce(-Sensors.planeWeight);
+		    	}
+		    	else if(forceTextField.getSelectedIndex() == 1)
+		    	{
+		    		sys.getGear().getSensors().setForce(0);
+		    	}
+		    }
+		});
+		
 		/*
 		 * SENSORS PANEL - END
 		 */
@@ -211,11 +242,38 @@ public class ControlPanel extends JPanel implements ActionListener{
 	
 	public void actionHandler(){
 		
+		
 		leverLabel.addMouseListener(
 			new MouseListener() {
 				public void mouseClicked(MouseEvent e) {
-			    	toggleLever();
-			    	sys.getGear().toggleGearSet();
+					if((sys.getGear().getGearSetStatus() == GearStatus.up && sys.getGear().isDownable() == true)){
+				    	toggleLever();
+				    	sys.getGear().toggleGearSet();
+					}
+					else if(sys.getGear().getGearSetStatus() == GearStatus.down && sys.getGear().isUpable() == true){
+						toggleLever();
+				    	sys.getGear().toggleGearSet();
+					}
+					else if(sys.getGear().getGearSetStatus() == GearStatus.up && sys.getGear().isDownable() == false){
+						if(sys.getGear().getSensors().getSpeed() > 800){
+							System.out.println("The speed ("+sys.getGear().getSensors().getSpeed()+") is too high!");
+							JOptionPane.showMessageDialog(null, "The speed ("+sys.getGear().getSensors().getSpeed()+") is too high!");
+						}
+						if(sys.getGear().getSensors().getForce() > 0){
+							System.out.println("The force ("+sys.getGear().getSensors().getForce()+") is too high!");
+							JOptionPane.showMessageDialog(null, "The force ("+sys.getGear().getSensors().getForce()+") is too high!");
+						}
+					}
+					else if(sys.getGear().getGearSetStatus() == GearStatus.down && sys.getGear().isUpable() == false){
+						if(sys.getGear().getSensors().getSpeed() < 300){
+							System.out.println("The speed ("+sys.getGear().getSensors().getSpeed()+") is too low!");
+							JOptionPane.showMessageDialog(null, "The speed ("+sys.getGear().getSensors().getSpeed()+") is too low!");
+						}
+						if(sys.getGear().getSensors().getForce() >= -Sensors.planeWeight){
+							System.out.println("The plane is on the ground !");
+							JOptionPane.showMessageDialog(null, "The plane is on the ground !");
+						}
+					}
 			    }
 			    public void mousePressed(MouseEvent e) {}
 			    public void mouseReleased(MouseEvent e) {}			    
