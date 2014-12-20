@@ -5,33 +5,54 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Gear extends Observable{
-	public enum GearStatus{up, down, goingUp, goingDown, stuck}
+	public enum GearStatus{up, down, goingUp, goingDown, stuck, doorOpen}
 	private GearStatus status;
+	private Door door;
 	
 	public Gear(){
-		//setStatus(GearStatus.down);
+		door = new Door();
 	}
 	
 	public void goUp(){
-		maneuver(GearStatus.up);
 		Timer timer = new Timer();
+		maneuver(GearStatus.up);
 		timer.schedule (new TimerTask() {
             public void run()
             {
-            	setStatus(GearStatus.up);
+            	door.setOpen(true);
+            	Timer timer2 = new Timer();
+            	setStatus(GearStatus.doorOpen);
+            	timer2.schedule (new TimerTask() {
+                    public void run()
+                    {
+                    	setStatus(GearStatus.up);
+                    }
+                }, 400);
             }
-        }, 3000);
+        }, 2000);
+		
 	}
 	
 	public void goDown(){
-		this.maneuver(GearStatus.down);
+		this.door.setOpen(true);
+		this.setStatus(GearStatus.doorOpen);
 		Timer timer = new Timer();
 		timer.schedule (new TimerTask() {
             public void run()
             {
-            	setStatus(GearStatus.down);
+            	maneuver(GearStatus.down);
+            	Timer timer2 = new Timer();
+        		timer2.schedule (new TimerTask() {
+                    public void run()
+                    {
+                    	setStatus(GearStatus.down);
+                    }
+                }, 2000);
+            	
             }
-        }, 3000);
+        }, 400);
+		
+		this.door.setOpen(false);
 	}
 	
 	public GearStatus maneuver(GearStatus direction){
@@ -57,6 +78,14 @@ public class Gear extends Observable{
 		setChanged();
 		notifyObservers();
 		System.out.println("Gear Status: "+this.status.toString());
+	}
+
+	public Door getGearDoor() {
+		return door;
+	}
+
+	public void setDoor(Door door) {
+		this.door = door;
 	}
 	
 	

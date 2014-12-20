@@ -42,6 +42,7 @@ public class ControlPanel extends JPanel implements ActionListener{
 	private BufferedImage screenDownImage;
 	private BufferedImage screenMovingImage;
 	private BufferedImage screenUpImage;
+	private BufferedImage screenDoorOpenImage;
 	protected Controller sys;
 	
 	public ControlPanel(Controller sys){
@@ -57,6 +58,7 @@ public class ControlPanel extends JPanel implements ActionListener{
 			this.screenDownImage = ImageIO.read(new File("images/gearOut2.png"));
 			this.screenMovingImage = ImageIO.read(new File("images/gearMoving2.png"));
 			this.screenUpImage = ImageIO.read(new File("images/gearIn2.png"));
+			this.screenDoorOpenImage = ImageIO.read(new File("images/doorOpen.png"));
 		} catch (IOException e) {
 			
 			e.printStackTrace();
@@ -86,7 +88,7 @@ public class ControlPanel extends JPanel implements ActionListener{
 		this.setSize(1000,800);
 		this.setLayout(grid);
 		
-		//INIT CONSTRAINTS - gbc
+		//INIT CONSTRAINTS
 		GridBagConstraints gbc = new GridBagConstraints();
 		
 		
@@ -174,10 +176,10 @@ public class ControlPanel extends JPanel implements ActionListener{
 		/*
 		 * COMMAND BOX - END
 		 */
-		leverLabel.setLocation(leverLabel.getX(), posFinale);
 	}
 	
 	public void actionHandler(){
+		
 		leverLabel.addMouseListener(
 			new MouseListener() {
 				public void mouseClicked(MouseEvent e) {
@@ -196,6 +198,8 @@ public class ControlPanel extends JPanel implements ActionListener{
 			leverLabel.setLocation(leverLabel.getX(), posFinale);
 		}
 		else leverLabel.setLocation(leverLabel.getX(), posInit);
+
+		
 	}
 	
 	public void upState(JLabel led){
@@ -223,6 +227,9 @@ public class ControlPanel extends JPanel implements ActionListener{
 		led.setIcon(new ImageIcon(LedRedImage));
 	}
 	
+	public void doorOpenState(JLabel image){
+		image.setIcon(new ImageIcon(screenDoorOpenImage));
+	}
 	public JLabel getLever(){
 		return this.leverLabel;
 	}
