@@ -16,5 +16,8 @@ public class Sensors {
 		this.speed = speed;
 		System.out.println("Speed: "+this.speed);
 	}
-	public void setForce(float force){this.force = force;}	
+	public void setForce(float force){
+		this.force = force;
+		System.out.println("Force: "+this.force);
+	}	
 }

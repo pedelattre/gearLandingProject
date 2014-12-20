@@ -25,14 +25,16 @@ public class ControlPanel extends JPanel implements ActionListener{
 	
 	public Box commandBox;
 	public JButton buttonControl;
-	
 	private JPanel ledsPanel;
+	private JPanel sensorsPanel;
 	private JLabel caseLabel;
 	private JLabel leverLabel;
 	private JLabel screenLabel;	
 	private JLabel LedGear1;
 	private JLabel LedGear2;
 	private JLabel LedGear3;
+	private JTextField speedTextField;
+	private JTextField forceTextField;	
 	private BufferedImage LedOffImage;
 	private BufferedImage LedGreenImage;
 	private BufferedImage LedOrangeImage;
@@ -47,6 +49,7 @@ public class ControlPanel extends JPanel implements ActionListener{
 	
 	public ControlPanel(Controller sys){
 		this.ledsPanel = new JPanel();
+		this.sensorsPanel = new JPanel();
 		this.buttonControl = new JButton("Toggle Gear");
 		try {
 			this.caseImage = ImageIO.read(new File("images/leverCase2.png"));
@@ -63,6 +66,10 @@ public class ControlPanel extends JPanel implements ActionListener{
 			
 			e.printStackTrace();
 		}
+		
+		this.speedTextField = new JTextField(String.valueOf(sys.getSensors().getSpeed()));
+		this.forceTextField = new JTextField(String.valueOf(sys.getSensors().getForce()));
+		
 		this.leverLabel = new JLabel(new ImageIcon(leverImage));
 		this.caseLabel = new JLabel(new ImageIcon(caseImage));
 		this.LedGear1 = new JLabel(new ImageIcon(LedGreenImage));
@@ -154,6 +161,21 @@ public class ControlPanel extends JPanel implements ActionListener{
 		 * SCREEN PANEL - END
 		 */
 		
+		
+		/*
+		 * SENSORS PANEL 
+		 */
+		GridLayout gridl = new GridLayout(2,2);
+		speedTextField.setPreferredSize(new Dimension(20,20));
+		sensorsPanel.setLayout(gridl);
+		sensorsPanel.add(new JLabel("Speed: "));
+		sensorsPanel.add(speedTextField);
+		sensorsPanel.add(new JLabel("Force: "));
+		sensorsPanel.add(forceTextField);
+		/*
+		 * SENSORS PANEL - END
+		 */
+		
 		/*
 		 * COMMAND BOX
 		 */
@@ -165,6 +187,9 @@ public class ControlPanel extends JPanel implements ActionListener{
 		caseLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
 		caseLabel.setSize(caseLabel.getWidth(), 400);
 		commandBox.add(caseLabel);
+		commandBox.add(sensorsPanel);
+		
+		
 		
 		//ADDS COMMAND BOX TO THE MAIN PANEL WITH CONSTRAINTS
 		gbc.fill = GridBagConstraints.HORIZONTAL;
