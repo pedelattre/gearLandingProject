@@ -15,7 +15,8 @@ public class GearLandingCommand extends JFrame implements Observer{
 	private ControlPanel pan;
 	public GearSet gearSet;
 	public Controller sys;
-		
+	
+	// Constructor
 	public GearLandingCommand(GearSet gearSet, Controller sys){		
 		this.gearSet = gearSet;
 		this.sys = sys;
