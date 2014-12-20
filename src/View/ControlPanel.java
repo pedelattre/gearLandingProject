@@ -117,7 +117,7 @@ public class ControlPanel extends JPanel implements ActionListener{
 		ledsGbc.anchor = GridBagConstraints.LINE_START;
 		ledsPanel.add(LedGear1, ledsGbc);
 					
-		//Oear2 Led
+		//Gear2 Led
 		ledsGbc.gridx = 1; 
 		ledsGbc.gridy = 0;
 		ledsGbc.gridheight = 1;
@@ -172,6 +172,13 @@ public class ControlPanel extends JPanel implements ActionListener{
 		sensorsPanel.add(speedTextField);
 		sensorsPanel.add(new JLabel("Force: "));
 		sensorsPanel.add(forceTextField);
+		
+		//ADDS SENSORS PANEL TO THE MAIN PANEL WITH CONSTRAINTS
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		gbc.weightx = 1;
+		this.add(sensorsPanel, gbc);
 		/*
 		 * SENSORS PANEL - END
 		 */
@@ -187,7 +194,6 @@ public class ControlPanel extends JPanel implements ActionListener{
 		caseLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
 		caseLabel.setSize(caseLabel.getWidth(), 400);
 		commandBox.add(caseLabel);
-		commandBox.add(sensorsPanel);
 		
 		
 		
