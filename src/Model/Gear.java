@@ -12,6 +12,10 @@ public class Gear extends Observable{
 	public Gear(){
 		door = new Door();
 	}
+	public Gear(GearStatus status){
+		door = new Door();
+		this.setStatus(status);
+	}
 	
 	public void goUp(){
 		Timer timer = new Timer();
