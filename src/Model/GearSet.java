@@ -29,7 +29,7 @@ public class GearSet extends Observable{
 	}
 	
 	public boolean isUpable() {
-		if(sensors.getForce() >= -Sensors.planeWeight)
+		if(sensors.getForce() == 0)
 		return false;
 		else return true;
 	}
